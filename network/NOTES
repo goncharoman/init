@@ -1,0 +1,18 @@
+"networksetup -listallhardwareports"
+
+ifconfig : 
+	lo0 - петлевой интерфейс (localhost)
+	en0 - ethernet-карта (если в flags стоит RUNNING, то воткнут сетевой кабель)
+	en1 - wi-fi-адаптер
+	en2 - thunderbolt bridge (1 интерфейс)
+	en3 - thunderbolt bridge (2 интерфейс)
+	bridge0 - thunderbolt
+	p2p0 - сетевой интерфейс к каналу точка-точки (в основном по en1)
+	awdl0 - сетевой интерфейс Apple для AirDrop, AirPlay и т.п.
+	utun0 - сетевой интерфейс Apple для "Back to my Mac" (удаленный раб стол)
+	gif0 - тунельный интерфейс (Software Network Interface)
+	stf0 - тунельный интерфейс (6to4 tunnel interface)
+
+	other :
+		vmnet_ - виртуальные интерфейсы
+		fw_ - Firewire
