@@ -1,0 +1,3 @@
+#kill $(service ssh status | awk '/Main PID:/{print $3}')
+
+service ssh stop

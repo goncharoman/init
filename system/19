@@ -1,0 +1,2 @@
+# ..их называют Демонами (daemons)
+systemctl list-units --type=service --all

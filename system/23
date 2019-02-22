@@ -1,0 +1,3 @@
+1) adduser newuser
+2) (GUI) login via logscreen
+2) (SSH) ssh -p port newuser@host
