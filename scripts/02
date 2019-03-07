@@ -1,13 +1,51 @@
-#!/bin/sh
+#!/bin/bash
 
-?? ACTIVE
+show_usage()
+{
+	echo "usage $0 [username] - deletes the last logged in user"
+	echo -e "\tusername - del user"
+}
 
-if [ $# -eq 1 ]
-then
-	for pr in $(pgrep -u $1); do
-		kill $pr
-	done
-	deluser $1
+check_user()
+{
+	if id $1 &> /dev/null; then return 1; else return 0; fi
+}
+
+check_tty()
+{
+	tty_user="$(who | awk '/tty/{print $1}')"
+	if [[ "$tty_user" == "$1" ]]; then return 1; else return 0; fi
+}
+
+kill_del()
+{
+	if [[ -n "$2" ]]; then
+		kill $2
+		echo "$1 ssh connection closed (PID: $2)"
+	fi
+	if check_tty $1; then
+		echo -n "will be deleted $1"
+		deluser $1 > /dev/null
+		echo " done"
+	else
+		echo "I can't delete this user ($1 connection via tty)"
+	fi
+}
+
+if [ $# -eq 1 ]; then
+	if check_user $1; then
+		echo "$1 not exist"
+		exit
+	fi
+	user_sshd=$(ps -u $1 | grep sshd | awk '{print $1}')
+	kill_del $1 $user_sshd
+elif [ $# -eq 0 ]; then
+	last_user=$(ps aux | grep "sshd" | grep -ve "root" -ve "grep" | tail -n 1 | awk '{print $1, $2}')
+	if [[ -n $last_user ]]; then
+		kill_del ${last_user[0]} ${last_user[1]}
+	else
+		echo "No one to kill"
+	fi
 else
-	echo "need username"
+	show_usage
 fi
