@@ -1,0 +1,13 @@
+#!/bin/sh
+
+?? ACTIVE
+
+if [ $# -eq 1 ]
+then
+	for pr in $(pgrep -u $1); do
+		kill $pr
+	done
+	deluser $1
+else
+	echo "need username"
+fi
